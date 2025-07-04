@@ -1,0 +1,127 @@
+databaseChangeLog:
+  # 1-qism: "location" jadvalini yaratish
+  # User Entity'si Location'ga bog'liq bo'lgani uchun, avval Location jadvalini yaratamiz.
+  - changeSet:
+      id: 1 # Bu fayl ichida birinchi o'zgarish
+      author: abdulbosit
+      changes:
+        - createTable:
+            tableName: location # Location Entity'sidagi @Table nomiga mos
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: lat
+                  type: DOUBLE
+              - column:
+                  name: lon
+                  type: DOUBLE
+
+  # 2-qism: "users" jadvalini yaratish
+  - changeSet:
+      id: 2 # Ikkinchi o'zgarish
+      author: abdulbosit
+      changes:
+        - createTable:
+            tableName: users # User Entity'sidagi @Entity nomiga mos
+            columns:
+              - column:
+                  name: chat_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  defaultValue: "USER"
+              - column:
+                  name: user_current_role
+                  type: VARCHAR(50)
+                  defaultValue: "USER"
+              - column:
+                  name: user_state
+                  type: VARCHAR(50)
+              - column:
+                  name: language
+                  type: VARCHAR(50)
+              - column:
+                  name: last_query_time
+                  type: TIMESTAMP
+              - column:
+                  name: is_blocked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+
+  # 3-qism: "users_locations" oraliq jadvalini yaratish (ManyToMany bog'lanishi uchun)
+  - changeSet:
+      id: 3 # Uchinchi o'zgarish
+      author: abdulbosit
+      changes:
+        - createTable:
+            tableName: users_locations # User Entity'sidagi @JoinTable nomiga mos
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users_locations_to_users
+                    references: users(chat_id)
+                    deleteCascade: true
+              - column:
+                  name: location_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users_locations_to_locations
+                    references: location(id)
+                    deleteCascade: true
+        - addPrimaryKey:
+            tableName: users_locations
+            columnNames: user_id, location_id
+            constraintName: pk_users_locations
+
+  # 4-qism: "user_notification_times" jadvalini yaratish (@ElementCollection uchun)
+  - changeSet:
+      id: 4 # To'rtinchi o'zgarish
+      author: abdulbosit
+      changes:
+        - createTable:
+            tableName: user_notification_times # Entity'dagi @CollectionTable nomiga mos
+            columns:
+              - column:
+                  name: user_id # Bu ustun "users" jadvaliga ishora qiladi
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_notification_times_to_users
+                    references: users(chat_id)
+                    deleteCascade: true
+              - column:
+                  name: notification_time # Vaqtlarni saqlaydigan ustun
+                  type: TIME
+                  constraints:
+                    nullable: false
+        # Foydalanuvchi uchun bir xil vaqt ikki marta qo'shilmasligi uchun
+        - addPrimaryKey:
+            tableName: user_notification_times
+            columnNames: user_id, notification_time
+            constraintName: pk_user_notification_times

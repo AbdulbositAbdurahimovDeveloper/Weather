@@ -1,0 +1,47 @@
+server:
+  port: 9090 # Ilova ishlaydigan port
+
+spring:
+  application:
+    name: telegram-bot-api # Ilova nomi
+
+  # Ma'lumotlar bazasiga ulanish sozlamalari
+  datasource:
+    url: jdbc:postgresql://localhost:5432/weather_bot
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+  # JPA va Hibernate sozlamalari
+  jpa:
+    hibernate:
+      # Hibernate'ning avtomatik sxema boshqaruvini o'chiramiz.
+      # Barcha sxema o'zgarishlari endi Liquibase orqali boshqariladi.
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true # Konsolda SQL so'rovlarini chiroyli formatda chiqaradi
+    show-sql: true # Bajarilayotgan barcha SQL so'rovlarini konsolda ko'rsatadi
+
+  # Liquibase migratsiya sozlamalari
+  liquibase:
+    enabled: true
+    # Asosiy changelog faylining yo'lini ko'rsatamiz. Endi u .yml kengaytmali.
+    change-log: classpath:db/changelog/db.changelog-master.yml
+
+# Telegram Bot sozlamalari
+telegrambots:
+  # Webhook so'rovlari keladigan umumiy yo'l (path). Boshiga "/" qo'yish shart.
+  # setWebhook'da ham aynan shu yo'lni ishlatasiz: https://.../my-weather-bot
+  webhook-path: /webhook
+  bots:
+    - username: testTB2503bot # Bot username'i (@ belgisiz)
+      token: 7692080931:AAHBcluxDg9DFYpPiTbjMXa9IKuERe_NoG4 # Bot tokeni
+
+# Log yozish darajalari
+logging:
+  level:
+    org.springframework: INFO # Spring freymvorkining loglarini INFO darajasida ko'rsatish
+    uz.pdp: DEBUG            # Sizning loyiha paketingizdagi loglarni DEBUG darajasida (batafsil) ko'rsatish
+    org.hibernate.SQL: DEBUG # Bajarilayotgan SQL so'rovlarini log'ga chiqarish
+    org.hibernate.type.descriptor.sql: TRACE # SQL so'rovlaridagi parametrlarni (?) ham ko'rsatish
