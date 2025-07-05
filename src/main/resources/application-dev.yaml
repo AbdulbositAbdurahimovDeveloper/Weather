@@ -44,8 +44,8 @@ telegrambots:
   # setWebhook'da ham aynan shu yo'lni ishlatasiz: https://.../my-weather-bot
   webhook-path: /webhook
   bots:
-    - username: telegram_bot  # Bot username'i (@ belgisiz)
-      token: 1234567890Aqwertyuio # Bot tokeni
+    - username:  # Bot username'i (@ belgisiz)
+      token:  # Bot tokeni
 
 # Log yozish darajalari
 logging:
