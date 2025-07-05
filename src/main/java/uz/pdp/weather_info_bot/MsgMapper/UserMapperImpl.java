@@ -4,12 +4,9 @@ import org.springframework.stereotype.Component;
 import uz.pdp.weather_info_bot.model.User;
 import uz.pdp.weather_info_bot.payload.UserDTO;
 
-import java.util.stream.Collectors;
-
 @Component
 public class UserMapperImpl
-        implements UserMapper
-{
+        implements UserMapper {
 
     private final LocationMapper locationMapper;
 
@@ -17,7 +14,7 @@ public class UserMapperImpl
         this.locationMapper = locationMapper;
     }
 
-//    @Override
+    //    @Override
     public UserDTO toDto(User user) {
         return new UserDTO(
                 user.getChatId(),
@@ -28,8 +25,9 @@ public class UserMapperImpl
                 user.getUserState(),
                 user.getUserCurrentRole(),
                 user.getLanguage(),
-                user.getLocations().stream().map(locationMapper::toDto).collect(Collectors.toSet()),
+                user.getLocation() != null ? locationMapper.toDTO(user.getLocation()) : null,
                 user.getLastQueryTime(),
+                user.getNotificationTime(),
                 user.isBlocked()
         );
     }

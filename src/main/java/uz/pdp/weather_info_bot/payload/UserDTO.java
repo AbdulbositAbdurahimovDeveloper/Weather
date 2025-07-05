@@ -9,6 +9,7 @@ import uz.pdp.weather_info_bot.enums.UserState;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 
 /**
@@ -26,8 +27,8 @@ public class UserDTO implements Serializable {
     private UserState userState;
     private Role userCurrentRole = Role.USER;
     private Language language;
-    private Set<LocationDTO> locations;
+    private LocationDTO location;
     private LocalDateTime lastQueryTime;
-//    private Set<LocalTime> notificationTimes;
+    private LocalTime notificationTime;
     private boolean isBlocked;
 }

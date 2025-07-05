@@ -5,5 +5,5 @@ public enum Language {
     uz,
     en,
     ru,
-    ;
+    none;
 }

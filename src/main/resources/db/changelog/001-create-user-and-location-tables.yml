@@ -1,12 +1,12 @@
 databaseChangeLog:
-  # 1-qism: "location" jadvalini yaratish
-  # User Entity'si Location'ga bog'liq bo'lgani uchun, avval Location jadvalini yaratamiz.
   - changeSet:
-      id: 1 # Bu fayl ichida birinchi o'zgarish
-      author: abdulbosit
+      id: 20231028-02-create-initial-schema-from-entities
+      author: dev (bu yerga ismingizni yozing)
+      comment: "Create location and a complete users table based on the final User entity"
       changes:
+        # 1-QADAM: "location" jadvalini yaratish
         - createTable:
-            tableName: location # Location Entity'sidagi @Table nomiga mos
+            tableName: location
             columns:
               - column:
                   name: id
@@ -19,109 +19,108 @@ databaseChangeLog:
                   name: name
                   type: VARCHAR(255)
               - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
                   name: lat
                   type: DOUBLE
+                  constraints:
+                    nullable: false
               - column:
                   name: lon
                   type: DOUBLE
+                  constraints:
+                    nullable: false
 
-  # 2-qism: "users" jadvalini yaratish
-  - changeSet:
-      id: 2 # Ikkinchi o'zgarish
-      author: abdulbosit
-      changes:
+        # 2-QADAM: "users" jadvalini yangi User modeliga to'liq mos holda yaratish
         - createTable:
-            tableName: users # User Entity'sidagi @Entity nomiga mos
+            tableName: users
             columns:
               - column:
+                  # @Id private Long chatId;
                   name: chat_id
                   type: BIGINT
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
+                  # private String username;
                   name: username
                   type: VARCHAR(255)
+                  constraints:
+                    nullable: true
               - column:
+                  # private String firstName;
                   name: first_name
                   type: VARCHAR(255)
+                  constraints:
+                    nullable: true # Ism har doim bo'lsa ham, xatolikdan saqlanish uchun true qoldiramiz
               - column:
+                  # private String lastName;
                   name: last_name
                   type: VARCHAR(255)
+                  constraints:
+                    nullable: true
               - column:
+                  # @Enumerated(EnumType.STRING) private Role role = Role.USER;
                   name: role
                   type: VARCHAR(50)
-                  defaultValue: "USER"
-              - column:
-                  name: user_current_role
-                  type: VARCHAR(50)
-                  defaultValue: "USER"
-              - column:
-                  name: user_state
-                  type: VARCHAR(50)
-              - column:
-                  name: language
-                  type: VARCHAR(50)
-              - column:
-                  name: last_query_time
-                  type: TIMESTAMP
-              - column:
-                  name: is_blocked
-                  type: BOOLEAN
-                  defaultValueBoolean: false
-
-  # 3-qism: "users_locations" oraliq jadvalini yaratish (ManyToMany bog'lanishi uchun)
-  - changeSet:
-      id: 3 # Uchinchi o'zgarish
-      author: abdulbosit
-      changes:
-        - createTable:
-            tableName: users_locations # User Entity'sidagi @JoinTable nomiga mos
-            columns:
-              - column:
-                  name: user_id
-                  type: BIGINT
+                  defaultValue: 'USER'
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_users_locations_to_users
-                    references: users(chat_id)
-                    deleteCascade: true
               - column:
+                  # @Enumerated(EnumType.STRING) private Role userCurrentRole = Role.USER;
+                  name: user_current_role
+                  type: VARCHAR(50)
+                  defaultValue: 'USER'
+                  constraints:
+                    nullable: false
+              - column:
+                  # @Enumerated(EnumType.STRING) private UserState userState;
+                  name: user_state
+                  type: VARCHAR(100) # Holatlar nomi uzun bo'lishi mumkin
+                  constraints:
+                    nullable: true
+              - column:
+                  # @Enumerated(EnumType.STRING) private Language language;
+                  name: language
+                  type: VARCHAR(10) # 'UZ', 'RU', 'EN' kabi qiymatlar uchun
+                  constraints:
+                    nullable: true # Ilovada standart qiymat beriladi
+              - column:
+                  # @ManyToOne private Location location;
                   name: location_id
                   type: BIGINT
                   constraints:
+                    nullable: true # Joylashuv tanlanmagan bo'lishi mumkin
+              - column:
+                  # @LastModifiedDate private LocalDateTime lastQueryTime;
+                  name: last_query_time
+                  type: TIMESTAMP WITHOUT TIME ZONE # LocalDateTime uchun
+                  constraints:
+                    nullable: true # Birinchi yozuvda null bo'lishi mumkin
+              - column:
+                  # private LocalTime notificationTime;
+                  name: notification_time
+                  type: TIME # LocalTime uchun
+                  constraints:
+                    nullable: true
+              - column:
+                  # private boolean isBlocked;
+                  name: is_blocked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
                     nullable: false
-                    foreignKeyName: fk_users_locations_to_locations
-                    references: location(id)
-                    deleteCascade: true
-        - addPrimaryKey:
-            tableName: users_locations
-            columnNames: user_id, location_id
-            constraintName: pk_users_locations
 
-  # 4-qism: "user_notification_times" jadvalini yaratish (@ElementCollection uchun)
-  - changeSet:
-      id: 4 # To'rtinchi o'zgarish
-      author: abdulbosit
-      changes:
-        - createTable:
-            tableName: user_notification_times # Entity'dagi @CollectionTable nomiga mos
-            columns:
-              - column:
-                  name: user_id # Bu ustun "users" jadvaliga ishora qiladi
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_notification_times_to_users
-                    references: users(chat_id)
-                    deleteCascade: true
-              - column:
-                  name: notification_time # Vaqtlarni saqlaydigan ustun
-                  type: TIME
-                  constraints:
-                    nullable: false
-        # Foydalanuvchi uchun bir xil vaqt ikki marta qo'shilmasligi uchun
-        - addPrimaryKey:
-            tableName: user_notification_times
-            columnNames: user_id, notification_time
-            constraintName: pk_user_notification_times
+        # 3-QADAM: "users" va "location" jadvallari o'rtasida tashqi kalit (Foreign Key) yaratish
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: location_id
+            constraintName: fk_users_location
+            referencedTableName: location
+            referencedColumnNames: id
+            onDelete: SET NULL
+            onUpdate: CASCADE

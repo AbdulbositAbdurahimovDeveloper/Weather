@@ -2,13 +2,13 @@ package uz.pdp.weather_info_bot.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
 import uz.pdp.weather_info_bot.enums.Language;
 import uz.pdp.weather_info_bot.enums.Role;
 import uz.pdp.weather_info_bot.enums.UserState;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,24 +39,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Language language;
 
+    @ManyToOne
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_locations",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "location_id")
-    )
-    private Set<Location> locations;
+    private Location location;
 
+    @LastModifiedDate
     private LocalDateTime lastQueryTime;
 
-    @ElementCollection(fetch = FetchType.EAGER) // EAGER, chunki vaqtlar odatda user bilan birga kerak bo'ladi
-    @CollectionTable(
-            name = "user_notification_times", // Yangi yordamchi jadval nomi
-            joinColumns = @JoinColumn(name = "user_id") // Bu jadvalni 'users' jadvaliga bog'laydigan ustun
-    )
-    @Column(name = "notification_time") // Vaqtlarning o'zi saqlanadigan ustun nomi
-    private Set<LocalTime> notificationTimes;
+    private LocalTime notificationTime;
 
     private boolean isBlocked;
 

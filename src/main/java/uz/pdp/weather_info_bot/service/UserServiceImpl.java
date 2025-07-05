@@ -3,7 +3,6 @@ package uz.pdp.weather_info_bot.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import uz.pdp.weather_info_bot.MsgMapper.LocationMapper;
 import uz.pdp.weather_info_bot.MsgMapper.UserMapper;
 import uz.pdp.weather_info_bot.enums.Language;
@@ -14,7 +13,6 @@ import uz.pdp.weather_info_bot.payload.UserDTO;
 import uz.pdp.weather_info_bot.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 
 
 @Service
@@ -27,25 +25,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO getOrSave(Message message) {
+    public UserDTO getOrSave(org.telegram.telegrambots.meta.api.objects.User fromUser) {
 
-        User chatId = userRepository.findById((message.getFrom().getId())).orElse(null);
+        User chatId = userRepository.findById((fromUser.getId())).orElse(null);
         if (chatId != null) {
             return userMapper.toDto(chatId);
         }
 
         User user = new User(
-                message.getFrom().getId(),
-                message.getFrom().getUserName(),
-                message.getFrom().getFirstName(),
-                message.getFrom().getLastName(),
+                fromUser.getId(),
+                fromUser.getUserName(),
+                fromUser.getFirstName(),
+                fromUser.getLastName(),
                 Role.USER,
                 Role.USER,
                 UserState.DEFAULT,
+                Language.none,
                 null,
-                new HashSet<>(),
                 LocalDateTime.now(),
-                new HashSet<>(),
+                null,
                 false
         );
 
@@ -60,6 +58,13 @@ public class UserServiceImpl implements UserService {
     public void updateUserState(Long chatId, UserState userState) {
         User user = userRepository.findByChatIdOrThrow(chatId);
         user.setUserState(userState);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateLang(long chatId, Language language) {
+        User user = userRepository.findByChatIdOrThrow(chatId);
+        user.setLanguage(language);
         userRepository.save(user);
     }
 }

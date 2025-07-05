@@ -5,6 +5,15 @@ spring:
   application:
     name: telegram-bot-api # Ilova nomi
 
+  cache:
+    # Kesh provayderi sifatida "caffeine" ni tanlash
+    type: caffeine
+    caffeine:
+      # spec - bu kesh uchun konfiguratsiyani bir qatorda berish usuli
+      # maximumSize: keshda saqlanadigan maksimal yozuvlar soni
+      # expireAfterWrite: yozuv keshga qo'shilgandan so'ng qancha vaqt o'tgach yaroqsiz bo'lishi (masalan, 15 daqiqa)
+      spec: maximumSize=500,expireAfterWrite=15m
+
   # Ma'lumotlar bazasiga ulanish sozlamalari
   datasource:
     url: jdbc:postgresql://localhost:5432/weather_bot
@@ -35,8 +44,8 @@ telegrambots:
   # setWebhook'da ham aynan shu yo'lni ishlatasiz: https://.../my-weather-bot
   webhook-path: /webhook
   bots:
-    - username: testTB2503bot # Bot username'i (@ belgisiz)
-      token: 7692080931:AAHBcluxDg9DFYpPiTbjMXa9IKuERe_NoG4 # Bot tokeni
+    - username: telegram_bot  # Bot username'i (@ belgisiz)
+      token: 1234567890Aqwertyuio # Bot tokeni
 
 # Log yozish darajalari
 logging:

@@ -3,6 +3,9 @@ package uz.pdp.weather_info_bot.utils;
 public interface Utils {
 
     // constants for weather info
+    String APE_KEY_1 = "api not found get it from https://www.weatherapi.com/signup.aspx";
+    String APE_KEY_2 = "api not found get it from https://www.weatherapi.com/signup.aspx";
+    String APE_KEY_3 = "api not found get it from https://www.weatherapi.com/signup.aspx";
 
     String WEATHER_INFO = "weatherInfo";
     String START = "/start";

@@ -3,6 +3,7 @@ package uz.pdp.weather_info_bot.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -14,20 +15,21 @@ import java.util.Set;
 @Table(name = "location")
 public class Location {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private Double lat;
+    @Column(nullable = false)
+    private Double lat;
 
-  private Double lon;
+    @Column(nullable = false)
+    private Double lon;
 
-  @ToString.Exclude
-  @ManyToMany(mappedBy = "locations")
-  private Set<User> users;
-
+    @ToString.Exclude
+    @OneToMany(mappedBy = "location")
+    private List<User> users;
 
 
 }
