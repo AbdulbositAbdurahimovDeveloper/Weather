@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1 # O'zgarishning unikal ID'si
+      author: your_name # O'zgarish muallifi
+      comment: "Create users table with AbsLongEntity fields and User-specific fields"
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              # AbsLongEntity'dan olingan maydonlar
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              # AbsDateEntity'dan olingan maydonlar
+              - column:
+                  name: created_at # Java'dagi createdAt CamelCase bo'lsa, DB'da snake_case bo'ladi
+                  type: TIMESTAMP WITHOUT TIME ZONE # Timestamp tipi uchun mos keladi
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at # Java'dagi updatedAt CamelCase bo'lsa, DB'da snake_case bo'ladi
+                  type: TIMESTAMP WITHOUT TIME ZONE # Timestamp tipi uchun mos keladi
+                  constraints:
+                    nullable: false
+
+              # User entity'sining o'ziga xos maydonlari
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_users_username
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_users_email
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_non_locked
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

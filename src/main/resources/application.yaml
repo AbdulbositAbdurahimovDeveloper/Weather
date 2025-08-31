@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Weather
+
+  config:
+    import: optional:env[.env]
+
+  profiles:
+    active: dev
+
+  banner:
+    location: classpath:banner.txt
+
