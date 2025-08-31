@@ -23,7 +23,7 @@ pipeline {
                 // Tozalik uchun avvalgi build qoldiqlarini o'chiramiz
                 cleanWs()
                 echo 'Klonlash boshlandi...'
-                git url: 'https://github.com/kamron4cik/oromland.git', branch: 'main'
+                git url: 'https://github.com/AbdulbositAbdurahimovDeveloper/Weather.git', branch: 'main'
                 echo 'Repo muvaffaqiyatli olindi.'
             }
         }
