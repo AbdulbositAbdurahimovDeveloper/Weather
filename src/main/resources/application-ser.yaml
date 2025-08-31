@@ -2,30 +2,25 @@ server:
   port: 8080
 
 spring:
-
   servlet:
     multipart:
       max-file-size: 2GB
       max-request-size: 2GB
-
   banner:
     location: classpath:banner.txt
-
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://central_postgres_db:5432/weather
     username: postgres
-    password: 2503
-
+    password: 2503 # Xavfsizlik uchun environment variable'dan oling! Masalan: ${DB_PASSWORD}
   liquibase:
     analytics-enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-
   data:
     redis:
       host: 176.57.188.165
       port: 6379
-      password: 2503
+      password: 2503 # Xavfsizlik uchun environment variable'dan oling! Masalan: ${REDIS_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
@@ -33,23 +28,20 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
   mail:
     host: smtp.gmail.com
     port: 587
-    username: email
-    password: parol
+    username: sizning.emailingiz@gmail.com # O'zingizning emailingiz
+    password: abcdwxyz1234abcd # Google App Password orqali olingan 16 xonali parol
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-
 logging:
   level:
     uz:
@@ -57,27 +49,16 @@ logging:
         online_education:
           service:
             GenerateService=DEBUG:
-#    root: WARN
-#    org.springframework.web: INFO
-#    org.hibernate.SQL: DEBUG
-#    org.hibernate.orm.jdbc.bind: TRACE
-#    org.hibernate.type.descriptor.sql: TRACE
-#    com.example.your.app: DEBUG
-
 application:
   jwt:
-    secret: ${JWT_SECRET_KEY}
-
-    access-token-expiration: ${ACCESS_TOKEN_EXPIRATION}
-
-    refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION}
-  cache:
-    temporary-process-ttl-seconds: ${CACHE_TIME}
-
+    secret: buJudaMaxfiyVaUzunKalitBolishiKerakChunkiXavfsizlikMuhim42!
+    access-token-expiration: 3600000 # 1 soat
+    refresh-token-expiration: 604800000 # 7 kun
+  cache: 3600
   telegram:
     bot:
-      token: ${TELEGRAM_BOT_TOKEN}
-      username: ${TELEGRAM_BOT_USERNAME}
-      channel-id: ${TELEGRAM_BOT_CHANNEL}
-  server_ip: ${SERVER_IP}
-  domain: ${MY_DOMAIN}
+      token: 1234567890:ABCdEfgHiJkl-MnoPqrsTuvWxYz1234 # BotFather'dan olingan token
+      username: MyWeatherInfoBot # Bot'ingizning userneymi
+      channel-id: '@myweatherchannel' # Yoki private ID: -1001234567890
+  server_ip: 176.57.188.165
+  domain: http://weather.abdulbosit.dev # Yoki http://176.57.188.165:8080

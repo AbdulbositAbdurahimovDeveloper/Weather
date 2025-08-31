@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1 # O'zgarishning unikal ID'si
-      author: your_name # O'zgarish muallifi
+      author: abdulbosit # O'zgarish muallifi
       comment: "Create users table with AbsLongEntity fields and User-specific fields"
       changes:
         - createTable:
