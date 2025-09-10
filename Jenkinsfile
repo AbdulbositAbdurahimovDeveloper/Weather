@@ -53,12 +53,9 @@ pipeline {
             steps {
                 echo "Container ishga tushirilmoqda: ${CONTAINER_NAME}"
 
-                // Eski container'ni o'chirish (agar mavjud bo'lsa)
                 sh "docker rm -f ${CONTAINER_NAME} || true"
 
-                // Yangi container'ni ishga tushirish
-                // --- > --network oromland-network < --- QO'SHILDI
-                sh "docker run -d --name ${CONTAINER_NAME} -p 8808:8080 --network oromland-network ${LATEST_IMAGE}"
+                sh "docker run -d --name ${CONTAINER_NAME} -p 8808:8080 --network app-network ${LATEST_IMAGE}"
 
                 echo "Ilova http://localhost:8808 manzilida ishga tushdi."
             }

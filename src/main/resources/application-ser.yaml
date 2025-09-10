@@ -13,7 +13,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     # ${DB_HOST}, ${DB_PORT}, ${DB_NAME} o'rniga aniq qiymatlar qo'yildi
-    url: jdbc:postgresql://central_postgres_db:5432/weather
+    url: jdbc:postgresql://postgres:5432/weather
     # ${DB_USERNAME} va ${DB_PASSWORD} o'rniga aniq qiymatlar qo'yildi
     username: postgres
     password: 2503
