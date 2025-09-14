@@ -9,12 +9,9 @@ spring:
   banner:
     location: classpath:banner.txt
 
-  # Ma'lumotlar bazasi sozlamalari
   datasource:
     driver-class-name: org.postgresql.Driver
-    # ${DB_HOST}, ${DB_PORT}, ${DB_NAME} o'rniga aniq qiymatlar qo'yildi
     url: jdbc:postgresql://postgres:5432/weather
-    # ${DB_USERNAME} va ${DB_PASSWORD} o'rniga aniq qiymatlar qo'yildi
     username: postgres
     password: 2503
 
@@ -22,10 +19,8 @@ spring:
     analytics-enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
 
-  # Redis sozlamalari
   data:
     redis:
-      # ${SERVER_IP}, ${REDIS_PORT}, ${REDIS_PASSWORD} o'rniga aniq qiymatlar qo'yildi
       host: 176.57.188.165
       port: 6379
       password: 2503
@@ -38,13 +33,11 @@ spring:
       hibernate:
         format_sql: true
 
-  # Email yuborish sozlamalari
   mail:
     host: smtp.gmail.com
     port: 587
-    # ${MAIL_USERNAME} va ${MAIL_PASSWORD} o'rniga aniq qiymatlar qo'yildi
     username: sizning.emailingiz@gmail.com
-    password: abcdwxyz1234abcd # Bu Google App Password bo'lishi kerak
+    password: abcdwxyz1234abcd
     properties:
       mail:
         smtp:
@@ -64,29 +57,20 @@ logging:
           service:
             GenerateService=DEBUG:
 
-# Ilovaning maxsus sozlamalari
 application:
-  # JWT token sozlamalari
   jwt:
-    # ${JWT_SECRET_KEY}, ${..._EXPIRATION} o'rniga aniq qiymatlar qo'yildi
     secret: buJudaMaxfiyVaUzunKalitBolishiKerakChunkiXavfsizlikMuhim42!
-    access-token-expiration: 3600000        # 1 soat
-    refresh-token-expiration: 604800000     # 7 kun
+    access-token-expiration: 3600000
+    refresh-token-expiration: 604800000
 
-  # Cache sozlamalari
   cache:
-    # ${CACHE_TIME} o'rniga aniq qiymat qo'yildi
     temporary-process-ttl-seconds: 3600
 
-  # Telegram bot sozlamalari
   telegram:
     bot:
-      # ${..._TOKEN}, ${..._USERNAME}, ${..._CHANNEL} o'rniga aniq qiymatlar qo'yildi
       token: 1234567890:ABCdEfgHiJkl-MnoPqrsTuvWxYz1234
       username: MyWeatherInfoBot
       channel-id: '@myweatherchannel'
 
-  # Server va Domen sozlamalari
-  # ${SERVER_IP} va ${MY_DOMAIN} o'rniga aniq qiymatlar qo'yildi
   server_ip: 176.57.188.165
   domain: http://weather.abdulbosit.dev

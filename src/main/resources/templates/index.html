@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherWise - Your Weather Companion</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* CSS Variables for easy theme management */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #ecf0f1;
+            --bg-color: #2c3e50;
+            --card-bg-color: #34495e;
+            --dark-text: #2c3e50;
+        }
+
+        /* General Reset & Body Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: transparent;
+            padding: 20px 0;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        .logo i {
+            color: var(--primary-color);
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-buttons .btn-secondary {
+            border: 2px solid var(--primary-color);
+        }
+        .nav-buttons .btn-secondary:hover {
+            background-color: var(--primary-color);
+        }
+
+        .nav-buttons .btn-primary {
+            background-color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        .nav-buttons .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        .hero h1 span {
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .btn-telegram {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .btn-telegram:hover {
+            background-color: #27ae60;
+        }
+        .btn-telegram i {
+            margin-right: 10px;
+        }
+
+        /* Weather Showcase Section */
+        .weather-showcase {
+            padding: 60px 0;
+        }
+
+        .weather-showcase h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .weather-card {
+            background: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .weather-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .weather-card .city {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .weather-card .weather-icon i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .weather-card .temp {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .weather-card .description {
+            font-size: 1.1rem;
+            text-transform: capitalize;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid var(--card-bg-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .nav-buttons a {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Section with Navigation -->
+<header>
+    <div class="container">
+        <a href="/" class="logo"><i class="fas fa-cloud-sun"></i> WeatherWise</a>
+        <div class="nav-buttons">
+            <a href="../login.html" class="btn-secondary">Sign In</a>
+            <a href="../register.html" class="btn-primary">Sign Up</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Real-time Weather Forecasts at Your <span>Fingertips</span></h1>
+            <p>Get accurate, up-to-the-minute weather information for any location. Sign up to personalize your experience or get instant updates directly in your Telegram!</p>
+            <a href="https://t.me/myWeatherBot_clonebot" target="_blank" class="btn-telegram">
+                <i class="fab fa-telegram-plane"></i> Get Updates on Telegram
+            </a>
+        </div>
+    </section>
+
+    <!-- Static Weather Data Showcase -->
+    <section class="weather-showcase">
+        <div class="container">
+            <h2>Today's Outlook</h2>
+            <div class="weather-grid">
+                <!-- Card 1: Toshkent -->
+                <div class="weather-card">
+                    <h3 class="city">Toshkent</h3>
+                    <div class="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <p class="temp">25°C</p>
+                    <p class="description">Sunny & Clear</p>
+                </div>
+
+                <!-- Card 2: Samarqand -->
+                <div class="weather-card">
+                    <h3 class="city">Samarqand</h3>
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <p class="temp">22°C</p>
+                    <p class="description">Partly Cloudy</p>
+                </div>
+
+                <!-- Card 3: Buxoro -->
+                <div class="weather-card">
+                    <h3 class="city">Buxoro</h3>
+                    <div class="weather-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <p class="temp">28°C</p>
+                    <p class="description">Windy & Sunny</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer Section -->
+<footer>
+    <div class="container">
+        <p>&copy; 2024 WeatherWise. All Rights Reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

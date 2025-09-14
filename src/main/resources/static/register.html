@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - WeatherWise</title>
+
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #ecf0f1;
+            --bg-color: #2c3e50;
+            --card-bg-color: #34495e;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .auth-container {
+            background: var(--card-bg-color);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .logo i {
+            color: var(--primary-color);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #566573;
+            border-radius: 5px;
+            background: #2c3e50;
+            color: var(--text-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .switch-form {
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .message-box {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+            border: 1px solid transparent;
+        }
+        .error-message {
+            color: var(--error-color);
+            background: rgba(231, 76, 60, 0.15);
+            border-color: var(--error-color);
+        }
+        .success-message {
+            color: var(--success-color);
+            background: rgba(46, 204, 113, 0.15);
+            border-color: var(--success-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <a href="/" class="logo"><i class="fas fa-cloud-sun"></i> WeatherWise</a>
+    <h1>Create Account</h1>
+
+    <p id="message-box" class="message-box"></p>
+
+    <form id="register-form">
+        <div class="form-group">
+            <input type="text" id="firstName" placeholder="First Name" required>
+        </div>
+        <div class="form-group">
+            <input type="text" id="lastName" placeholder="Last Name" required>
+        </div>
+        <div class="form-group">
+            <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="email" id="email" placeholder="Email Address" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        </div>
+        <div class="form-group">
+            <input type="tel" id="phoneNumber" placeholder="Phone Number (Optional)">
+        </div>
+        <button type="submit" class="btn-submit">Sign Up</button>
+    </form>
+    <div class="switch-form">
+        <p>Already have an account? <a href="login.html">Sign In</a></p>
+    </div>
+</div>
+
+<script>
+    const registerForm = document.getElementById('register-form');
+    const messageBox = document.getElementById('message-box');
+
+    registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Hide previous messages
+        messageBox.style.display = 'none';
+        messageBox.className = 'message-box';
+
+        // Collect form data
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+
+        // Client-side password confirmation
+        if (password !== confirmPassword) {
+            showMessage('Passwords do not match.', 'error');
+            return;
+        }
+
+        const registerData = { firstName, lastName, username, email, password, phoneNumber };
+
+        try {
+            // STEP 1: Attempt to register the user
+            const registerResponse = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(registerData)
+            });
+
+            if (!registerResponse.ok) {
+                const errorData = await registerResponse.json();
+                let errorMessage = errorData.error?.message || 'Registration failed.';
+                // Handle field-specific errors
+                if (errorData.error?.fieldErrors) {
+                    errorMessage += ' ' + errorData.error.fieldErrors.map(e => `${e.field}: ${e.message}`).join(', ');
+                }
+                throw new Error(errorMessage);
+            }
+
+            // Registration was successful
+            showMessage('Registration successful! Logging you in...', 'success');
+
+            // STEP 2: Attempt to automatically log the user in
+            const loginData = { username, password };
+            const loginResponse = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData)
+            });
+
+            if (!loginResponse.ok) {
+                throw new Error('Auto-login failed. Please try to sign in manually.');
+            }
+
+            const tokenData = await loginResponse.json();
+
+            // Save tokens and redirect
+            localStorage.setItem('accessToken', tokenData.access_token);
+            localStorage.setItem('refreshToken', tokenData.refresh_token);
+            localStorage.setItem('username', tokenData.username);
+
+            window.location.href = 'weather.html';
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    function showMessage(message, type) {
+        messageBox.textContent = message;
+        messageBox.classList.add(type === 'error' ? 'error-message' : 'success-message');
+        messageBox.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

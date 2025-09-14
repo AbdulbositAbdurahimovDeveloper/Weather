@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - WeatherWise</title>
+
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --text-color: #ecf0f1;
+            --bg-color: #2c3e50;
+            --card-bg-color: #34495e;
+            --error-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .auth-container {
+            background: var(--card-bg-color);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #566573;
+            border-radius: 5px;
+            background: #2c3e50;
+            color: var(--text-color);
+            font-size: 1rem;
+            box-sizing: border-box; /* To include padding in width */
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #2980b9;
+        }
+
+        .switch-form {
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            background: rgba(231, 76, 60, 0.15);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+            border: 1px solid var(--error-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <a href="/" class="logo"><i class="fas fa-cloud-sun"></i> WeatherWise</a>
+    <h1>Sign In</h1>
+
+    <p id="error-message" class="error-message"></p>
+
+    <form id="login-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn-submit">Sign In</button>
+    </form>
+    <div class="switch-form">
+        <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+    </div>
+</div>
+
+<script>
+    // Select elements from the DOM
+    const loginForm = document.getElementById('login-form');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('error-message');
+
+    // Add an event listener for the form submission
+    loginForm.addEventListener('submit', async (event) => {
+        // 1. Prevent the default form submission (which reloads the page)
+        event.preventDefault();
+
+        // Hide any previous error messages
+        errorMessage.style.display = 'none';
+
+        // 2. Create the data payload matching the LoginDTO
+        const loginData = {
+            username: usernameInput.value,
+            password: passwordInput.value
+        };
+
+        try {
+            // 3. Send the POST request to the API
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            });
+
+            // 4. Process the response
+            if (response.ok) {
+                // Login was successful
+                const tokenData = await response.json();
+
+                // 5. Save tokens to localStorage
+                localStorage.setItem('accessToken', tokenData.access_token);
+                localStorage.setItem('refreshToken', tokenData.refresh_token);
+
+                // Optional: Save other user info if needed
+                localStorage.setItem('username', tokenData.username);
+
+                // 6. Redirect to the weather page
+                window.location.href = 'weather.html';
+
+            } else {
+                // Login failed (e.g., 401 Unauthorized, 400 Bad Request)
+                const errorResponse = await response.json();
+                const message = errorResponse.error?.message || 'Login failed. Please check your credentials.';
+
+                // Display the error message to the user
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+        } catch (error) {
+            // Handle network errors or other unexpected issues
+            console.error('An error occurred during login:', error);
+            errorMessage.textContent = 'A network error occurred. Please try again later.';
+            errorMessage.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
